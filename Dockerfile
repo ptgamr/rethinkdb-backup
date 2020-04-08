@@ -12,7 +12,7 @@ ENV RETHINKDB_PYTHON_CLIENT_VERSION 2.3.0.post6
 
 RUN apt-get -qqy update \
   && apt-get install -y rethinkdb=$RETHINKDB_PACKAGE_VERSION \
-  && rm -rf /var/lib/apt/lists/* |
+  && rm -rf /var/lib/apt/lists/* \
   && apt-get -y install python-pip \
   && sudo pip install rethinkdb==$RETHINKDB_PYTHON_CLIENT_VERSION \
   && mkdir /backups \

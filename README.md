@@ -12,26 +12,31 @@ Assume that you have a running RethinkDB instance inside `rethinkdb-devel` conta
 If you do not have it, you can create one with the following command:
 
 ```
-sudo docker run -d --name rethinkdb-devel -p 127.0.0.1:8080:8080 -p 127.0.0.1:28015:28015 -p 127.0.0.1:29015:29015 rethinkdb:2.3.7
+$ sudo docker run -d --name rethinkdb-devel -p 127.0.0.1:8080:8080 -p 127.0.0.1:28015:28015 -p 127.0.0.1:29015:29015 rethinkdb:2.3.7
 ```
 
 
 Build the docker image:
 
 ```
-docker build -t ptgamr/rethinkdb-backup:2.0 .
+$ cd rethinkdb-backup
+$ sudo docker build -t ptgamr/rethinkdb-backup:2.0 .
 ```
 
 Run it  & link with `rethinkdb-devel`
 
 ```
-sudo docker run -d --name rethinkdb-backup --link rethinkdb-devel:rethinkdb -v /home/anh/backups:/backups ptgamr/rethinkdb-backup
+$ sudo docker run -d --name rethinkdb-backup --link rethinkdb-devel:rethinkdb -v /home/anh/backups:/backups ptgamr/rethinkdb-backup
 ```
 
 Import from dump:
 
 ```
-rethinkdb import -d rethinkdb_dump_2020-04-08T03:00:02 -c rethinkdb-devel -i schedulerapi_devel.gamereports
+# Enter the container
+$ sudo docker exec -it rethinkdb-backup bash
+
+# Inside the container, run:
+$ rethinkdb import -d rethinkdb_dump_2020-04-08T03:00:02 -c rethinkdb-devel -i schedulerapi_devel.gamereports
 ```
 
 

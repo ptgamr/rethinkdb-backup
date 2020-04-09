@@ -1,9 +1,48 @@
+An image which contains ultility like `rethinkdb dump` or `rethinkdb restore`, to serve the purpose of backup & restore RethinkDB data in containerized environment.
+
+It's mainly because the [official Dockerfile](https://github.com/rethinkdb/rethinkdb-dockerfiles) to run RethinkDB doesn't have those ultilites.
+
+https://github.com/rethinkdb/rethinkdb-dockerfiles
+
+https://registry.hub.docker.com/_/rethinkdb/
+
+## Usage:
+
+Assume that you have a running RethinkDB instance inside `rethinkdb-devel` container.
+If you do not have it, you can create one with the following command:
+
+```
+sudo docker run -d --name rethinkdb-devel -p 127.0.0.1:8080:8080 -p 127.0.0.1:28015:28015 -p 127.0.0.1:29015:29015 rethinkdb:2.3.7
+```
+
+
+Build the docker image:
+
+```
+docker build -t ptgamr/rethinkdb-backup:2.0 .
+```
+
+Run it  & link with `rethinkdb-devel`
+
+```
+sudo docker run -d --name rethinkdb-backup --link rethinkdb-devel:rethinkdb -v /home/anh/backups:/backups ptgamr/rethinkdb-backup
+```
+
+Import from dump:
+
+```
+rethinkdb import -d rethinkdb_dump_2020-04-08T03:00:02 -c rethinkdb-devel -i schedulerapi_devel.gamereports
+```
+
+
+##################
+# OLD Docs
+
 # rethinkdb-backup
 
 This image runs rethinkdb dump to backup data using cronjob to folder `/backups`
 
-## Usage:
-
+## Usages
     docker run -d \
         --env RETHINKDB_HOST=rethinkdb.host \
         --env RETHINKDB_PORT=27017 \
